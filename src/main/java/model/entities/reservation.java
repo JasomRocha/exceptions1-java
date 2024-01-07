@@ -7,6 +7,7 @@ package model.entities;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import model.exceptions.DomainException;
 
 public class reservation {
     private Integer roomNumber;
@@ -43,19 +44,19 @@ public class reservation {
     }
      
     
-    public String updateDates(Date checkin, Date checkout){
+    public void updateDates(Date checkin, Date checkout) throws DomainException{
         Date now = new Date();
             
             if(checkin.before(now) || checkout.before(now)){
-                return "Reservation dates for Update must be future dates.";
+                throw new DomainException ("Reservation dates for Update must be future dates.");
             }
             if(!checkout.after(checkin)){
-                return "checkout date must be after checkin date.";
+                throw new DomainException ("checkout date must be after checkin date.");
             }
         
         this.checkin = checkin;
         this.checkout = checkout;
-        return null;
+      
     }
 
     @Override
